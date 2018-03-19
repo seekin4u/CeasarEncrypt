@@ -64,7 +64,7 @@ namespace CeasorsCrypt_lab1
         {//lowercase english alphabet is 97 to 122
             for (int i = 0; i < cryptText.Length; i++)
             {
-                int buffer = (((int)cryptText[i] - (int)'a' + key + 2) % 26) + (int)'a';
+                int buffer = (((int)cryptText[i] - (int)'a' + key) % 26) + (int)'a';
                 bufferChar[i] = (char)buffer;
             }
         }
