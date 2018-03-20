@@ -83,6 +83,12 @@ namespace CeasorsCrypt_lab1
             ///args[3] is keypharse
             String[] args = Environment.GetCommandLineArgs();
 
+            //some DEFENCIVE programming, yea
+            if (args.Length == 1)//there always will be 1 arg - app's NAME, so args.Lengts always will be >= 1
+            {
+                return;
+            }
+
             for (int i = 1; i < args.Length; i++)//start from [1] becouse [0] is application's name
             {
                 //Console.WriteLine("args[" + i + "] : " + args[i]);
