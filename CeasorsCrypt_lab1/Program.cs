@@ -9,12 +9,13 @@ namespace CeasorsCrypt_lab1
         private const String methodMessage = "\nargs must be /c(rypt) or /d(ecrypt";
         private const String keyMessage = "\nKey must be int number in range of alphabet.symbols.count (like 1 to 25 in English)";
 
-        private static char[] alphabet = {'a', 'b', 'c', 'd', 'e',
-                                          'f', 'g' ,'h' , 'i', 'j',
-                                          'k' , 'l', 'm', 'n', 'o' ,
-                                          'p' , 'q', 'r', 's', 't',
-                                          'u' , 'v' , 'w', 'x', 'y',
-                                          'z' , ' '};//last is space
+        private static char[] alphabet = {'а', 'б', 'в', 'г', 'д',
+                                          'е', 'ж', 'з', 'и', 'й',
+                                          'к', 'л', 'м', 'н', 'о',
+                                          'п', 'р', 'с', 'т', 'у',
+                                          'ф', 'х', 'ц', 'ч', 'ш',
+                                          'щ', 'ъ', 'ы', 'ь', 'э',
+                                          'ю', 'я', ' ' };//last is space
         private static string mode = "";
         private static int key = 0;
         private static char[] keyPharse = { };//holding by-char text we should crypt or de-crypt
@@ -48,23 +49,29 @@ namespace CeasorsCrypt_lab1
                     Console.WriteLine("Incomming and outcomming arrays are the same. Report this error.");
             }
             Console.WriteLine();
-            Console.ReadLine();
+            //Console.ReadLine();
         }
 
         private static void decrypt(char[] cryptText , int key)
         {
             for (int i = 0; i < cryptText.Length; i++)
             {
-                int buffer = (((int)cryptText[i] - (int)'a' - key) % 26) + (int)'a';
+                if (cryptText[i] == ' ')
+                    continue;
+                int buffer = ((int)cryptText[i] - (int)'а' - key + 32) % 32;
+                buffer += (int)'а';
                 bufferChar[i] = (char)buffer;
             }
         }
 
         private static void encrypt(char[] cryptText , int key)
-        {//lowercase english alphabet is 97 to 122
+        {
             for (int i = 0; i < cryptText.Length; i++)
             {
-                int buffer = (((int)cryptText[i] - (int)'a' + key) % 26) + (int)'a';
+                if (cryptText[i] == ' ')
+                    continue;
+                int buffer = ((int)cryptText[i] - (int)'а' + key) % 32;
+                buffer += (int)'а';
                 bufferChar[i] = (char)buffer;
             }
         }
@@ -73,18 +80,12 @@ namespace CeasorsCrypt_lab1
         {
             foreach (char c in bufferChar) Console.Write(c);
         }
-        /// <summary>
-        /// Check incomming string and make it lowercased. Set checkResult variable to true or false.
-        /// </summary>
+
         private static void argsCheck()
         {
-            ///args[1] is crypt/decrypt - /c or /d command
-            ///args[2] is keyword for crypting or decrypting
-            ///args[3] is keypharse
             String[] args = Environment.GetCommandLineArgs();
 
-            //some DEFENCIVE programming, yea
-            if (args.Length == 1)//there always will be 1 arg - app's NAME, so args.Lengts always will be >= 1
+            if (args.Length == 1)
             {
                 return;
             }
@@ -118,7 +119,7 @@ namespace CeasorsCrypt_lab1
             {
                 int checkNumber = 0;
                 bool keyResult = Int32.TryParse(args[2], out checkNumber);
-                if (!keyResult || (checkNumber < 1 && checkNumber > 26))
+                if (!keyResult || (checkNumber < 1 && checkNumber >  33))
                 {
                     Console.WriteLine(keyMessage);
                     checkResult = false;
@@ -132,7 +133,8 @@ namespace CeasorsCrypt_lab1
             try//a lot of errors with strings, so we should know about it
             {
                 args[3] = args[3].ToLower();//lowercasing it
-                bufferChar = args[3].ToCharArray();
+                bufferChar = new Char[args[3].Length + 5];
+                bufferChar = (args[3].ToCharArray());
 
                 var result = from ch in args[3].ToCharArray()
                              join ch1 in alphabet on ch equals ch1
